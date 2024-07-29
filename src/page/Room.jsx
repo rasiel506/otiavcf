@@ -74,7 +74,7 @@ const Room = () => {
   const userID = uuid();
   const [user, setUser] = useState({
     uid: userID,
-    email: randomEmail(),
+    email: "customer",
     displayName: randomEmail(),
     photoURL: "https://parkridgevet.com.au/wp-content/uploads/2020/11/Profile-300x300.png"
   })

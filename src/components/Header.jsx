@@ -9,7 +9,7 @@ const Header = () => {
   return (
     <div className="h-16 px-3 bg-darkBlue1 text-slate-300 w-full flex items-center border-b-2 border-lightGray">
       <div className="flex-grow font-semibold">
-        <Link to="/">Connect</Link>
+        <Link to="/">Connected</Link>
       </div>
       <div>
         {user ? (

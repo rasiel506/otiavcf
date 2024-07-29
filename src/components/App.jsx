@@ -6,6 +6,7 @@ import { Routes, Route } from "react-router-dom";
 import Header from "./Header";
 import Sidebar from "./Sidebar";
 
+
 // pages
 import Home from "../page/Home";
 import Room from "../page/Room";
@@ -22,6 +23,7 @@ const App = () => {
           <Route path="/" element={<Home />} />
           {/* <Route path="/room/:roomID" element={<NewRoom />} /> */}
           <Route path="/room/:roomID" element={<Room />} />
+          <Route path="/active-rooms" element={<ActiveRooms />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </div>

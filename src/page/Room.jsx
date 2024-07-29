@@ -332,7 +332,7 @@ const Room = () => {
                         </button> */}
                         </div>
                       </motion.div>
-                      <div className="flex items-center justify-between">
+                      <div className="flex items-center justify-between" style="position: absolute;top: 30px;left: 30px;">
                       <div className="flex gap-2">
                         <div>
                           <button

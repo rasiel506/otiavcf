@@ -331,11 +331,6 @@ const Room = () => {
                           {micOn ? <MicOnIcon /> : <MicOffIcon />}
                         </button> */}
                         </div>
-                        <div className="absolute bottom-4 left-4">
-                          <div className="bg-slate-800/70 backdrop-blur border-gray border-2  py-1 px-3 cursor-pointer rounded-md text-white text-xs">
-                            {user?.displayName}
-                          </div>
-                        </div>
                       </motion.div>
                       {peers.map((peer) => (
                         // console.log(peer),

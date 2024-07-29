@@ -418,14 +418,6 @@ const Room = () => {
                           <button
                             className={`bg-slate-800/70 backdrop-blur border-gray
           border-2  p-2 cursor-pointer rounded-xl text-white text-xl`}
-                          >
-                            {/* <ScreenShareIcon size={22} /> */}
-                          </button>
-                        </div>
-                        <div>
-                          <button
-                            className={`bg-slate-800/70 backdrop-blur border-gray
-          border-2  p-2 cursor-pointer rounded-xl text-white text-xl`}
                             onClick={() => setShare(true)}
                           >
                             <ShareIcon size={22} />

@@ -345,7 +345,29 @@ const Room = () => {
                   <div className="w-full h-16 bg-darkBlue1 border-t-2 border-lightGray p-3">
                     <div className="flex items-center justify-between">
                       <div className="flex gap-2">
-                      
+                        <div>
+                          <button
+                            className={`${
+                              micOn
+                                ? "bg-blue border-transparent"
+                                : "bg-slate-800/70 backdrop-blur border-gray"
+                            } border-2  p-2 cursor-pointer rounded-xl text-white text-xl`}
+                            onClick={() => {
+                              const audio =
+                                localVideo.current.srcObject.getAudioTracks()[0];
+                              if (micOn) {
+                                audio.enabled = false;
+                                setMicOn(false);
+                              }
+                              if (!micOn) {
+                                audio.enabled = true;
+                                setMicOn(true);
+                              }
+                            }}
+                          >
+                            {micOn ? <MicOnIcon /> : <MicOffIcon />}
+                          </button>
+                        </div>
                         <div>
                           <button
                             className={`${
@@ -368,54 +390,9 @@ const Room = () => {
                             {videoActive ? <VideoOnIcon /> : <VideoOffIcon />}
                           </button>
                         </div>
-                        {/* <div>
-                          <button
-                            className={`bg-blue border-transparent
-           border-2  p-2 cursor-pointer rounded-xl text-white text-xl`}
-                          >
-                            <UsersIcon />
-                          </button>
-                        </div> */}
                       </div>
-                      <div className="flex-grow flex justify-center">
-                        <button
-                          className="py-2 px-4 flex items-center gap-2 rounded-lg bg-red"
-                          onClick={() => {
-                            navigate("/");
-                            window.location.reload();
-                          }}
-                        >
-                          <CallEndIcon size={20} />
-                          <span className="hidden sm:block text-xs">
-                            End Call
-                          </span>
-                        </button>
-                      </div>
-                      <div className="flex gap-2">
-                        <div>
-                          <button
-                            className={`bg-slate-800/70 backdrop-blur border-gray
-          border-2  p-2 cursor-pointer rounded-xl text-white text-xl`}
-                            onClick={() => setShare(true)}
-                          >
-                            <ShareIcon size={22} />
-                          </button>
-                        </div>
-                        <div>
-                          <button
-                            className={`${
-                              showChat
-                                ? "bg-blue border-transparent"
-                                : "bg-slate-800/70 backdrop-blur border-gray"
-                            } border-2  p-2 cursor-pointer rounded-xl text-white text-xl`}
-                            onClick={() => {
-                              setshowChat(!showChat);
-                            }}
-                          >
-                            <ChatIcon />
-                          </button>
-                        </div>
-                      </div>
+                      
+                    
                     </div>
                   </div>
                 </motion.div>

@@ -477,60 +477,6 @@ const Room = () => {
                             <DownIcon />
                           </div>
                         </div>
-                        <motion.div
-                          layout
-                          className={`${
-                            particpentsOpen ? "block" : "hidden"
-                          } flex flex-col w-full mt-2 h-full max-h-[50vh] overflow-y-scroll gap-3 p-2 bg-blue-600`}
-                        >
-                          <AnimatePresence>
-                            <motion.div
-                              layout
-                              initial={{ x: 100, opacity: 0 }}
-                              animate={{ x: 0, opacity: 1 }}
-                              transition={{ duration: 0.08 }}
-                              exit={{ opacity: 0 }}
-                              whileHover={{ scale: 1.05 }}
-                              className="p-2 flex bg-gray items-center transition-all hover:bg-slate-900 gap-2 rounded-lg"
-                            >
-                              <img
-                                src={
-                                  user.photoURL ||
-                                  "https://parkridgevet.com.au/wp-content/uploads/2020/11/Profile-300x300.png"
-                                }
-                                alt={user.displayName || "Anonymous"}
-                                className="block w-8 h-8 aspect-square rounded-full mr-2"
-                              />
-                              <span className="font-medium text-sm">
-                                {user.displayName || "Anonymous"}
-                              </span>
-                            </motion.div>
-                            {peers.map((user) => (
-                              <motion.div
-                                layout
-                                initial={{ x: 100, opacity: 0 }}
-                                animate={{ x: 0, opacity: 1 }}
-                                transition={{ duration: 0.08 }}
-                                exit={{ opacity: 0 }}
-                                key={user.peerID}
-                                whileHover={{ scale: 1.05 }}
-                                className="p-2 flex bg-gray items-center transition-all hover:bg-slate-900 gap-2 rounded-lg"
-                              >
-                                <img
-                                  src={
-                                    user.user.photoURL ||
-                                    "https://parkridgevet.com.au/wp-content/uploads/2020/11/Profile-300x300.png"
-                                  }
-                                  alt={user.user.name || "Anonymous"}
-                                  className="block w-8 h-8 aspect-square rounded-full mr-2"
-                                />
-                                <span className="font-medium text-sm">
-                                  {user.user.name || "Anonymous"}
-                                </span>
-                              </motion.div>
-                            ))}
-                          </AnimatePresence>
-                        </motion.div>
                       </div>
                       <div className="h-full">
                         <div className="flex items-center bg-darkBlue1 p-3 w-full">

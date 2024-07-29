@@ -457,7 +457,7 @@ const Room = () => {
                     <div
                       className="flex-shrink-0 overflow-y-scroll"
                       style={{
-                        height: "calc(100vh - 128px)",
+                        height: "calc(100vh - 64px)",
                       }}
                     >
                       <div className="flex flex-col bg-darkBlue1 w-full border-b-2 border-gray">

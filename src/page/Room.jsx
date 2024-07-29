@@ -331,19 +331,7 @@ const Room = () => {
                           {micOn ? <MicOnIcon /> : <MicOffIcon />}
                         </button> */}
                         </div>
-                      </motion.div>
-                      {peers.map((peer) => (
-                        // console.log(peer),
-                        <MeetGridCard
-                          key={peer?.peerID}
-                          user={peer.user}
-                          peer={peer?.peer}
-                        />
-                      ))}
-                    </motion.div>
-                  </div>
-                  <div className="w-full h-16 bg-darkBlue1 border-t-2 border-lightGray p-3">
-                    <div className="flex items-center justify-between">
+                        <div className="flex items-center justify-between">
                       <div className="flex gap-2">
                         <div>
                           <button
@@ -394,6 +382,19 @@ const Room = () => {
                       
                     
                     </div>
+                      </motion.div>
+                      {peers.map((peer) => (
+                        // console.log(peer),
+                        <MeetGridCard
+                          key={peer?.peerID}
+                          user={peer.user}
+                          peer={peer?.peer}
+                        />
+                      ))}
+                    </motion.div>
+                  </div>
+                  <div className="w-full h-16 bg-darkBlue1 border-t-2 border-lightGray p-3">
+                    
                   </div>
                 </motion.div>
            

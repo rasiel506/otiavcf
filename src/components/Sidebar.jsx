@@ -7,7 +7,10 @@ import { Link, NavLink } from "react-router-dom";
 import { FiSettings as SettingIcon } from "react-icons/fi";
 
 const Sidebar = () => {
-
+  return (
+    <div>
+    </div>
+  );
 };
 
 export default Sidebar;

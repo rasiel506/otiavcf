@@ -460,24 +460,6 @@ const Room = () => {
                         height: "calc(100vh - 64px)",
                       }}
                     >
-                      <div className="flex flex-col bg-darkBlue1 w-full border-b-2 border-gray">
-                        <div
-                          className="flex items-center w-full p-3 cursor-pointer"
-                          onClick={() => setParticpentsOpen(!particpentsOpen)}
-                        >
-                          <div className="text-xl text-slate-400">
-                            <UsersIcon />
-                          </div>
-                          <div className="ml-2 text-sm font">Particpents</div>
-                          <div
-                            className={`${
-                              particpentsOpen && "rotate-180"
-                            } transition-all  ml-auto text-lg`}
-                          >
-                            <DownIcon />
-                          </div>
-                        </div>
-                      </div>
                       <div className="h-full">
                         <div className="flex items-center bg-darkBlue1 p-3 w-full">
                           <div className="text-xl text-slate-400">

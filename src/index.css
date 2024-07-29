@@ -24,6 +24,9 @@ body {
 .posabs1{
   position: absolute;top: 30px;left: 30px;
 }
+.bg-blue{
+  background-color: rgb(0 0 0 / 30%);
+}
 /* 
 @layer components {
   .sidebar-icon {

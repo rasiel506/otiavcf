@@ -37,9 +37,7 @@ body {
   display: none;
 }
 .flexcent{
-  display: flex;
-  align-content: center;
-  justify-content: center;
+  width: 90%;
 }
 .h95vh{
   height: 95dvh;

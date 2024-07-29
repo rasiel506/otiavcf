@@ -258,7 +258,7 @@ const Room = () => {
                   className="flex flex-col bg-darkBlue2 justify-between w-full"
                 >
                   <div
-                    className="flex-shrink-0 overflow-y-scroll p-3"
+                    className="flex-shrink-0 overflow-y-scroll p-3 flexcent"
                     style={{
                       height: '100dvh',
                     }}
@@ -268,7 +268,7 @@ const Room = () => {
                     >
                       <motion.div
                         layout
-                        className={`relative bg-lightGray rounded-lg aspect-video d-none overflow-hidden ${
+                        className={`relative bg-lightGray rounded-lg aspect-video d-none overflow-hidden h95vh ${
                           pin &&
                           "md:col-span-2 md:row-span-2 md:col-start-1 md:row-start-1"
                         }`}

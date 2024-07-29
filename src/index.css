@@ -33,6 +33,14 @@ body {
 .d-none{
   display: none;
 }
+.flexcent{
+  display: flex;
+  align-content: center;
+  justify-content: center;
+}
+.h95vh{
+  height: 95dvh;
+}
 /* 
 @layer components {
   .sidebar-icon {

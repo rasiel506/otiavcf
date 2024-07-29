@@ -377,9 +377,6 @@ const Room = () => {
                       ))}
                     </motion.div>
                   </div>
-                  <div className="w-full h-16 bg-darkBlue1 border-t-2 border-lightGray p-3">
-                    
-                  </div>
                 </motion.div>
            
               </motion.div>

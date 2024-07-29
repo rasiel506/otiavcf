@@ -22,7 +22,10 @@ body {
   height: 100dvh;
 }
 .posabs1{
-  position: absolute;top: 30px;left: 30px;
+  left: 48%;
+  position: absolute;
+  top: 20px;
+  z-index: 99999;
 }
 .bg-blue{
   background-color: rgb(0 0 0 / 30%);

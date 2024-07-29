@@ -255,7 +255,7 @@ const Room = () => {
               >
                 <motion.div
                   layout
-                  className="flex flex-col bg-darkBlue2 justify-between w-full"
+                  className="flex flex-col bg-darkBlue2 justify-between w-full stl1"
                 >
                   <div
                     className="flex-shrink-0 overflow-y-scroll p-3 flexcent"

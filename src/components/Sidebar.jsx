@@ -38,9 +38,6 @@ const Sidebar = () => {
           </NavLink>
         ))}
       </div>
-      <div className="bg-lightGray border-2 border-gray p-2.5 cursor-pointer rounded-xl text-slate-300">
-        <SettingIcon />
-      </div>
     </div>
   );
 };

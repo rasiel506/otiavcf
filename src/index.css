@@ -30,6 +30,9 @@ body {
 .text-white{
   color: rgb(255 255 255 / 80%);
 }
+.d-none{
+  display: none;
+}
 /* 
 @layer components {
   .sidebar-icon {

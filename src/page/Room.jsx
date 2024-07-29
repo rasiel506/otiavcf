@@ -99,16 +99,26 @@ const Room = () => {
   };
 
   useEffect(() => {
-    const connectToRoom = () => {
+
+    const unsub = () => {
       socket.current = io.connect(
-        process.env.SOCKET_BACKEND_URL || "https://otiavcb-production.up.railway.app/"
+         process.env.SOCKET_BACKEND_URL || "https://otiavcb-production.up.railway.app/"
       );
-
       socket.current.on("message", (data) => {
-        // Handle incoming messages
+        const audio = new Audio(msgSFX);
+        if (user?.uid !== data.user.id) {
+          console.log("send");
+          audio.play();
+        }
+        const msg = {
+          send: user?.uid === data.user.id,
+          ...data,
+        };
+        setMsgs((msgs) => [...msgs, msg]);
+        // setMsgs(data);
+        // console.log(data);
       });
-
-      if (user) {
+      if (user)
         navigator.mediaDevices
           .getUserMedia({
             video: true,
@@ -117,64 +127,76 @@ const Room = () => {
           .then((stream) => {
             setLoading(false);
             setLocalStream(stream);
-            if (localVideo.current) {
-              localVideo.current.srcObject = stream;
+            if(localVideo.current){
+ localVideo.current.srcObject = stream;
             }
-
+           
             socket.current.emit("join room", {
               roomID,
-              user: {
-                uid: user.uid,
-                email: user.email,
-                name: user.displayName,
-                photoURL: user.photoURL,
-              },
+              user: user
+                ? {
+                    uid: user?.uid,
+                    email: user?.email,
+                    name: user?.displayName,
+                    photoURL: user?.photoURL,
+                  }
+                : null,
             });
-
             socket.current.on("all users", (users) => {
-              // Handle users in the room
+              const peers = [];
+              users.forEach((user) => {
+                const peer = createPeer(user.userId, socket.current.id, stream);
+                peersRef.current.push({
+                  peerID: user.userId,
+                  peer,
+                  user: user.user,
+                });
+                peers.push({
+                  peerID: user.userId,
+                  peer,
+                  user: user.user,
+                });
+              });
+              setPeers(peers);
             });
 
             socket.current.on("user joined", (payload) => {
-              // Handle user joining
+              // console.log(payload);
+              const peer = addPeer(payload.signal, payload.callerID, stream);
+              peersRef.current.push({
+                peerID: payload.callerID,
+                peer,
+                user: payload.user,
+              });
+
+              const peerObj = {
+                peerID: payload.callerID,
+                peer,
+                user: payload.user,
+              };
+
+              setPeers((users) => [...users, peerObj]);
             });
 
             socket.current.on("receiving returned signal", (payload) => {
-              // Handle receiving returned signal
+              const item = peersRef.current.find(
+                (p) => p.peerID === payload.id
+              );
+              item.peer.signal(payload.signal);
             });
 
             socket.current.on("user left", (id) => {
-              // Handle user leaving
+              const audio = new Audio(leaveSFX);
+              audio.play();
+              const peerObj = peersRef.current.find((p) => p.peerID === id);
+              if (peerObj) peerObj.peer.destroy();
+              const peers = peersRef.current.filter((p) => p.peerID !== id);
+              peersRef.current = peers;
+              setPeers((users) => users.filter((p) => p.peerID !== id));
             });
           });
-      }
     };
-
-    connectToRoom();
-
-    // Send roomID to backend API
-    const sendRoomIDToAPI = async () => {
-      try {
-        const response = await fetch("https://otia.ai/6/updateRoom.php", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ roomID }),
-        });
-
-        if (!response.ok) {
-          throw new Error("Failed to send room ID");
-        }
-
-        const data = await response.json();
-        console.log("Room ID sent successfully:", data);
-      } catch (error) {
-        console.error("Error sending room ID:", error);
-      }
-    };
-
-    sendRoomIDToAPI();
+    return unsub();
   }, [user, roomID]);
 
   const createPeer = (userToSignal, callerID, stream) => {
@@ -189,12 +211,14 @@ const Room = () => {
         userToSignal,
         callerID,
         signal,
-        user: {
-          uid: user.uid,
-          email: user.email,
-          name: user.displayName,
-          photoURL: user.photoURL,
-        },
+        user: user
+          ? {
+              uid: user?.uid,
+              email: user?.email,
+              name: user?.displayName,
+              photoURL: user?.photoURL,
+            }
+          : null,
       });
     });
 
@@ -207,11 +231,10 @@ const Room = () => {
       trickle: false,
       stream,
     });
-
     peer.on("signal", (signal) => {
       socket.current.emit("returning signal", { signal, callerID });
     });
-
+    joinSound.play();
     peer.signal(incomingSignal);
     return peer;
   };
@@ -219,36 +242,202 @@ const Room = () => {
   return (
     <>
       {user ? (
-        loading ? (
-          <div className="bg-lightGray">
-            <Loading />
-          </div>
-        ) : (
-          <div className="flex flex-row bg-darkBlue2 text-white w-full">
-            <div className="flex flex-col bg-darkBlue2 justify-between w-full">
-              <div className="flex-shrink-0 overflow-y-scroll p-3 flexcent" style={{ height: '100dvh' }}>
-                <div>
-                  <div className={`relative bg-lightGray rounded-lg aspect-video d-none overflow-hidden`}>
-                    <video
-                      ref={localVideo}
-                      muted
-                      autoPlay
-                      controls={false}
-                      className="h-full w-full object-cover rounded-lg"
+        <AnimatePresence>
+          {loading ? (
+            <div className="bg-lightGray">
+              <Loading />
+            </div>
+          ) : (
+            user && (
+              <motion.div
+                layout
+                className="flex flex-row bg-darkBlue2 text-white w-full"
+              >
+                <motion.div
+                  layout
+                  className="flex flex-col bg-darkBlue2 justify-between w-full"
+                >
+                  <div
+                    className="flex-shrink-0 overflow-y-scroll p-3 flexcent"
+                    style={{
+                      height: '100dvh',
+                    }}
+                  >
+                    <motion.div
+                      layout
+                    >
+                      <motion.div
+                        layout
+                        className={`relative bg-lightGray rounded-lg aspect-video d-none overflow-hidden ${
+                          pin &&
+                          "md:col-span-2 md:row-span-2 md:col-start-1 md:row-start-1"
+                        }`}
+                      >
+         
+
+                        <video
+                          ref={localVideo}
+                          muted
+                          autoPlay
+                          controls={false}
+                          className="h-full w-full object-cover rounded-lg"
+                        />
+                        {!videoActive && (
+                          <div className="absolute top-0 left-0 bg-lightGray h-full w-full flex items-center justify-center">
+                            <img
+                              className="h-[35%] max-h-[150px] w-auto rounded-full aspect-square object-cover"
+                              src={user?.photoURL}
+                              alt={user?.displayName}
+                            />
+                          </div>
+                        )}
+
+                        <div className="absolute bottom-4 right-4">
+                          {/* <button
+                          className={`${
+                            micOn
+                              ? "bg-blue border-transparent"
+                              : "bg-slate-800/70 backdrop-blur border-gray"
+                          } border-2  p-2 cursor-pointer rounded-xl text-white text-xl`}
+                          onClick={() => {
+                            const audio =
+                              localVideo.current.srcObject.getAudioTracks()[0];
+                            if (micOn) {
+                              audio.enabled = false;
+                              setMicOn(false);
+                            }
+                            if (!micOn) {
+                              audio.enabled = true;
+                              setMicOn(true);
+                            }
+                          }}
+                        >
+                          {micOn ? <MicOnIcon /> : <MicOffIcon />}
+                        </button> */}
+                        </div>
+                      </motion.div>
+                      <div className="flex items-center justify-between posabs1">
+                      <div className="flex gap-2">
+                        <div>
+                          <button
+                            className={`${
+                              micOn
+                                ? "bg-blue border-transparent"
+                                : "bg-slate-800/70 backdrop-blur border-gray"
+                            } border-2  p-2 cursor-pointer rounded-xl text-white text-xl`}
+                            onClick={() => {
+                              const audio =
+                                localVideo.current.srcObject.getAudioTracks()[0];
+                              if (micOn) {
+                                audio.enabled = false;
+                                setMicOn(false);
+                              }
+                              if (!micOn) {
+                                audio.enabled = true;
+                                setMicOn(true);
+                              }
+                            }}
+                          >
+                            {micOn ? <MicOnIcon /> : <MicOffIcon />}
+                          </button>
+                        </div>
+                        <div>
+                          <button
+                            className={`${
+                              videoActive
+                                ? "bg-blue border-transparent"
+                                : "bg-slate-800/70 backdrop-blur border-gray"
+                            } border-2  p-2 cursor-pointer rounded-xl text-white text-xl`}
+                            onClick={() => {
+                              const videoTrack = localStream
+                                .getTracks()
+                                .find((track) => track.kind === "video");
+                              if (videoActive) {
+                                videoTrack.enabled = false;
+                              } else {
+                                videoTrack.enabled = true;
+                              }
+                              setVideoActive(!videoActive);
+                            }}
+                          >
+                            {videoActive ? <VideoOnIcon /> : <VideoOffIcon />}
+                          </button>
+                        </div>
+                      </div>
+                      
+                    
+                    </div>
+                      {peers.map((peer) => (
+                        // console.log(peer),
+                        <MeetGridCard
+                          key={peer?.peerID}
+                          user={peer.user}
+                          peer={peer?.peer}
+                        />
+                      ))}
+                    </motion.div>
+                  </div>
+                </motion.div>
+           
+              </motion.div>
+            )
+          )}
+          {share && (
+            <div className="fixed flex items-center justify-center top-0 left-0 h-full w-full z-30 bg-slate-800/60 backdrop-blur">
+              <div className="bg-white  p-3 rounded shadow shadow-white w-full mx-auto max-w-[500px] relative">
+                <div className="flex items-center justify-between">
+                  <div className="text-slate-800">
+                    Share the link with someone to join the room
+                  </div>
+                  <div>
+                    <ClearIcon
+                      size={30}
+                      color="#121212"
+                      onClick={() => setShare(false)}
                     />
                   </div>
-                  {peers.map((peer) => (
-                    <MeetGridCard key={peer.peerID} user={peer.user} peer={peer.peer} />
-                  ))}
+                </div>
+                <div className="my-5 rounded flex items-center justify-between gap-2 text-sm text-slate-500 bg-slate-200 p-2 ">
+                  <LinkIcon />
+                  <div className="flex-grow">
+                    {window.location.href.length > 40
+                      ? `${window.location.href.slice(0, 37)}...`
+                      : window.location.href}
+                  </div>
+                  <CopyToClipboardIcon
+                    className="cursor-pointer"
+                    onClick={() =>
+                      navigator.clipboard.writeText(window.location.href)
+                    }
+                  />
+                </div>
+                <div className="flex w-full aspect-square h-full justify-center items-center">
+                  <QRCode
+                    // className="hidden"
+                    size={200}
+                    value={window.location.href}
+                    logoImage="/images/logo.png"
+                    qrStyle="dots"
+                    style={{ width: "100%" }}
+                    eyeRadius={10}
+                  />
                 </div>
               </div>
             </div>
-          </div>
-        )
+          )}
+        </AnimatePresence>
       ) : (
-        <div className="h-full bg-darkBlue2 flex items-center justify-center">
-          {/* Add your login or other content here */}
-        </div>
+        {/* <div className="h-full bg-darkBlue2 flex items-center justify-center">
+          <button
+            className="flex items-center gap-2 p-1 pr-3 rounded text-white font-bold bg-blue transition-all"
+            onClick={login}
+          >
+            <div className="p-2 bg-white rounded">
+              <GoogleIcon size={24} />
+            </div>
+            Login with Google
+          </button>
+        </div> */}
       )}
     </>
   );

@@ -268,7 +268,7 @@ const Room = () => {
                     >
                       <motion.div
                         layout
-                        className={`relative bg-lightGray rounded-lg aspect-video overflow-hidden ${
+                        className={`relative bg-lightGray rounded-lg aspect-video d-none overflow-hidden ${
                           pin &&
                           "md:col-span-2 md:row-span-2 md:col-start-1 md:row-start-1"
                         }`}

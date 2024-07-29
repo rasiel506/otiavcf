@@ -260,7 +260,7 @@ const Room = () => {
                   <div
                     className="flex-shrink-0 overflow-y-scroll p-3"
                     style={{
-                      height: "calc(100vh - 128px)",
+                      height: '100dvh',
                     }}
                   >
                     <motion.div

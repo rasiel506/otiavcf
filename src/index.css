@@ -18,6 +18,9 @@ body {
   box-sizing: border-box;
 }
 
+.bg-darkBlue2{
+  height: 100dvh;
+}
 /* 
 @layer components {
   .sidebar-icon {

@@ -21,6 +21,9 @@ body {
 .bg-darkBlue2{
   height: 100dvh;
 }
+.posabs1{
+  position: absolute;top: 30px;left: 30px;
+}
 /* 
 @layer components {
   .sidebar-icon {

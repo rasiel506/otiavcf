@@ -9,7 +9,7 @@ const ActiveRooms = () => {
   const socket = useRef();
 
   useEffect(() => {
-    socket.current = io.connect(process.env.REACT_APP_SOCKET_URL || "https://otiavcb-production.up.railway.app/");
+    socket.current = io.connect(process.env.SOCKET_BACKEND_URL || "https://otiavcb-production.up.railway.app/");
     
     socket.current.on("active rooms", (rooms) => {
       setRooms(rooms);

@@ -5,6 +5,7 @@ import { Routes, Route } from "react-router-dom";
 // components
 import Header from "./Header";
 import Sidebar from "./Sidebar";
+import ActiveRooms from "./ActiveRooms";
 
 
 // pages

@@ -278,18 +278,7 @@ const Room = () => {
                           "md:col-span-2 md:row-span-2 md:col-start-1 md:row-start-1"
                         }`}
                       >
-                        <div className="absolute top-4 right-4 z-20">
-                          <button
-                            className={`${
-                              pin
-                                ? "bg-blue border-transparent"
-                                : "bg-slate-800/70 backdrop-blur border-gray"
-                            } md:border-2 border-[1px] aspect-square md:p-2.5 p-1.5 cursor-pointer md:rounded-xl rounded-lg text-white md:text-xl text-lg`}
-                            onClick={() => setPin(!pin)}
-                          >
-                            {pin ? <PinActiveIcon /> : <PinIcon />}
-                          </button>
-                        </div>
+         
 
                         <video
                           ref={localVideo}
